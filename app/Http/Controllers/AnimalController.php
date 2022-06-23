@@ -44,8 +44,9 @@ class AnimalController extends Controller
         ]);
 
         $animal = Animal::firstWhere('name', $request->name);
-        $animal->age = $animal->age + 1;
         $kind = $animal->kind;
+        $new_age = $animal->age + 1;
+        $animal->age = $new_age > $kind->max_age ? $kind->max_age : $new_age;
         $new_size = $animal->size + $kind->growth_factor;
         $animal->size = $new_size > $kind->max_size ? $kind->max_size : $new_size;
 
