@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\KindController;
 use App\Http\Controllers\AnimalController;
-use App\Http\Middleware\JsonResponseMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,16 +21,12 @@ use App\Http\Middleware\JsonResponseMiddleware;
 //     return $request->user();
 // });
 
-Route::middleware(JsonResponseMiddleware::class)->group(function(){
-    
-    Route::get('/animal_kinds', [KindController::class, 'index']);
+Route::get('/animal_kinds', [KindController::class, 'index']);
 
-    Route::get('/animals', [AnimalController::class, 'index']);
+Route::get('/animals', [AnimalController::class, 'index']);
 
-    Route::get('/animals/{name}', [AnimalController::class, 'show']);
+Route::get('/animals/{name}', [AnimalController::class, 'show']);
 
-    Route::post('/animals', [AnimalController::class, 'create']);
+Route::post('/animals', [AnimalController::class, 'create']);
 
-    Route::post('/animals/age', [AnimalController::class, 'age']);
-
-});
+Route::post('/animals/age', [AnimalController::class, 'age']);
