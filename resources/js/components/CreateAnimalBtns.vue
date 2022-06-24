@@ -1,16 +1,17 @@
 <template>
     <div class="controls">
         <button class="btn btnToggle"
-            v-on:click="onToggleShowBtn">
+            v-on:click="show = !show">
             <img src="../../assets/images/add.svg" alt="">
         </button>
         <div class="controls__switchable-area">
             <transition name="show">
-                <div class="controls__switchable" v-if="show">
+                <div class="controls__switchable" v-show="show">
                     <button class="btn" 
-                        v-for="animal in animals" 
-                        :key="animal.kind">
-                        <img :src="animal.icon" alt="icon" />
+                        v-for="kind in kinds"
+                        @click="selectKind(kind.kind)" 
+                        :key="kind.kind">
+                        <img :src="animals.find(a => a.kind == kind.kind).icon" alt="icon" />
                     </button>
                 </div>
             </transition>
@@ -18,8 +19,50 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<script>
+import catSvg from '../../assets/images/cat.svg'
+import dogSvg from '../../assets/images/dog.svg'
+import birdSvg from '../../assets/images/bird.svg'
+import bearSvg from '../../assets/images/bear.svg'
 
+export default {
+    props: {
+        kinds: Array,
+        onClickBtn: Function
+    },
+
+    data: () => ({
+        show: false,
+        animals: [
+            {
+                kind: 'Cat',
+                icon: catSvg
+            },
+            {
+                kind: 'Dog',
+                icon: dogSvg
+            },
+            {
+                kind: 'Bird',
+                icon: birdSvg
+            },
+            {
+                kind: 'Bear',
+                icon: bearSvg
+            }
+        ]
+    }),
+
+    methods: {
+        selectKind(kind_name) {
+            this.show = false
+            this.$emit('selectkind', kind_name)
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
     .controls {
         display: flex;
 
@@ -28,6 +71,8 @@
         position: absolute;
         top: 100px;
         left: 100px;
+
+        z-index: 99;
     }
 
     .controls__switchable-area {
@@ -98,48 +143,3 @@
         }
     }
 </style>
-
-<script>
-import catSvg from '../../assets/images/cat.svg'
-import dogSvg from '../../assets/images/dog.svg'
-import birdSvg from '../../assets/images/bird.svg'
-import bearSvg from '../../assets/images/bear.svg'
-
-export default {
-    components: {
-        
-    },
-
-    data: () => ({
-        show: true,
-        animals: [
-            {
-                kind: 'Cat',
-                icon: catSvg
-            },
-            {
-                kind: 'Dog',
-                icon: dogSvg
-            },
-            {
-                kind: 'Bird',
-                icon: birdSvg
-            },
-            {
-                kind: 'Bear',
-                icon: bearSvg
-            }
-        ]
-    }),
-
-    mounted() {
-        
-    },
-
-    methods: {
-        onToggleShowBtn() {
-            this.show = !this.show
-        }
-    }
-}
-</script>
