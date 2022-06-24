@@ -48,8 +48,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    @import url("https://fonts.googleapis.com/css?family=Fjalla+One&display=swap");
-
     .form {
         background: #f8f4e5;
         padding: 40px;
