@@ -54,4 +54,9 @@ class AnimalController extends Controller
 
         return $animal;
     }
+
+    public function destroyAll() {
+        $affected = Animal::whereNotNull('id')->delete();
+        return ['affected' => $affected];
+    }
 }

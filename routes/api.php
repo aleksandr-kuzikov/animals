@@ -30,3 +30,5 @@ Route::get('/animals/{name}', [AnimalController::class, 'show']);
 Route::post('/animals', [AnimalController::class, 'create']);
 
 Route::post('/animals/age', [AnimalController::class, 'age']);
+
+Route::delete('/animals/all', [AnimalController::class, 'destroyAll']);
