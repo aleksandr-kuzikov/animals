@@ -27,7 +27,7 @@ class AnimalController extends Controller
 
     public function create(Request $request) {
         $validated = $request->validate([
-            'kind' => 'bail|required|exists:kind',
+            'kind' => 'bail|required|exists:kinds',
             'name' => 'required'
         ]);
 
