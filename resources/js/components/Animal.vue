@@ -1,7 +1,7 @@
 <template>
-    <div ref="animal" class="animal" v-bind:style="maxAnimalSizeCss">
+    <div class="animal" v-bind:style="{width: maxAnimalSize + 'px'}">
         <span class="animal__title">{{ animal.name }}</span>
-        <img :src="animal.icon" alt="icon" :width="animalSize">
+        <img ref="animated" :src="kind.icon" alt="icon" :width="animalSize">
     </div>
 </template>
 <script>
@@ -16,23 +16,26 @@ export default {
     },
 
     data: () => ({
-        interval: null,
+        interval: null
     }),
 
     methods: {
         ageEvent() {
             this.interval = setInterval(() => {
                 this.$emit('age', this.animal.name)
-            }, 1000 * this.ageTime)
+            }, this.ageTimeInMs)
         }
     },
 
     computed: {
         animalSize() {
-            return this.sizeDelta * this.size
+            return this.sizeDelta * this.animal.size
         },
-        maxAnimalSizeCss() {
-            return {width: this.sizeDelta * this.kind.max_size + 'px'}
+        maxAnimalSize() {
+            return this.sizeDelta * this.kind.max_size
+        },
+        ageTimeInMs() {
+            return 1000 * this.ageTime
         }
     },
 
@@ -40,8 +43,6 @@ export default {
         if (this.animal.age < this.kind.max_age) {
             this.ageEvent()
         }
-
-        this.$refs.animal.addEventListener('mouseover', this.hoverAnimal)
     },
     
     updated() {
@@ -53,7 +54,6 @@ export default {
 
     beforedestroyed() {
         clearInterval(this.interval)
-        this.$refs.animal.removeEventListener('mouseover', this.hoverAnimal)
     }
 }
 </script>
@@ -76,6 +76,7 @@ export default {
         background-color: rgb(250, 250, 250, .8);
 
         font-size: 16px;
+        text-transform: uppercase;
         margin-bottom: 24px;
     }
 </style>

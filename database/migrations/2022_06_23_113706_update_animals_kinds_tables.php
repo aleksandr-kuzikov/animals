@@ -30,6 +30,7 @@ return new class extends Migration
             $table->double('max_size', 5, 2);
             $table->integer('max_age');
             $table->double('growth_factor', 5, 2);
+            $table->string('icon');
             $table->timestamps();
         });
     }

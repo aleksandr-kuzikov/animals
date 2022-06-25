@@ -1,6 +1,7 @@
 <template>
     <div class="main">
         <CreateAnimalBtn v-if="hasKinds" :kinds="kinds" @selectkind="showCreateAnimalDialog" />
+        <RemoveAllBtn v-if="hasAnimals" @removeAnimals="removeAnimals" />
         <AnimalsGrid v-if="hasAnimals" :animals="animals" :kinds="kinds" @age="ageAnimalRequest" />
         <CreateAnimalForm v-if="showForm" 
             :kind="selectedKind" 
@@ -13,19 +14,19 @@
     import CreateAnimalBtn from './CreateAnimalBtns.vue'
     import AnimalsGrid from './AnimalsGrid.vue'
     import CreateAnimalForm from './CreateAnimalForm.vue'
-
-    import catSvg from '../../assets/images/cat.svg'    
+    import RemoveAllBtn from './RemoveAllBtn.vue'
 
     export default {
         components: {
             CreateAnimalBtn,
             AnimalsGrid,
-            CreateAnimalForm
+            CreateAnimalForm,
+            RemoveAllBtn
         },
 
         data: () => ({
             showForm: false,
-            selectedKind: null,
+            selectedKind: Object,
             kinds: [],
             animals: []
         }),
@@ -46,13 +47,13 @@
 
             axios
                 .get('/api/animals')
-                .then(response => (this.animals = response.data.map(a => ({...a, icon: catSvg}))))
+                .then(response => (this.animals = response.data))
         },
 
         methods: {
             showCreateAnimalDialog(kind_name) {
                 this.showForm = true
-                this.selectedKind = kind_name
+                this.selectedKind = this.kinds.find(k => k.kind == kind_name)
             },
             closeCreateAnimalDialog() {
                 this.showForm = false
@@ -60,15 +61,15 @@
             },
             createAnimal(animalData) {
                 this.showForm = false
-                axios
-                    .post('/api/animals', animalData)
-                    .then(response => this.animals.push({...response.data, icon: catSvg}))
-                    .catch(error => console.log(error))
+                this.animals.push(animalData)
             },
             ageAnimalRequest(name) {
                 axios
                     .post('/api/animals/age', {name})
-                        .then(response => this.animals.splice(this.animals.findIndex(a => a.name == name), 1, {...response.data, icon: catSvg}))
+                    .then(response => this.animals.splice(this.animals.findIndex(a => a.name == name), 1, response.data))
+            },
+            removeAnimals() {
+                 this.animals = []
             }
         }
     }
@@ -86,7 +87,7 @@
     .main {
         background-image: url(https://krot.info/uploads/posts/2020-10/1603666099_10-p-fon-polyanka-11.jpg);
         background-size: cover;
-        background-size: cover;
+        background-position: bottom center;
         background-repeat: no-repeat;
 
         position: absolute;
@@ -94,5 +95,26 @@
         bottom: 0;
         left: 0;
         right: 0;
+    }
+    
+    .button {
+        display: block;
+        font-family: "Fjalla One";
+        margin: 0 auto;
+        line-height: 32px;
+        padding: 0 20px;
+        background: #ffa580;
+        letter-spacing: 2px;
+        transition: 0.2s all ease-in-out;
+        outline: none;
+        border: 1px solid black;
+        box-shadow: 3px 3px 1px 1px #95a4ff, 3px 3px 1px 2px black;
+        cursor: pointer;
+
+        &:hover {
+            background: black;
+            color: white;
+            border: 1px solid black;
+        }
     }
 </style>

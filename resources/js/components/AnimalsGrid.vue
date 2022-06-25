@@ -5,7 +5,7 @@
                 <div ref="grid" class="animals-grid__grid">
                     <Animal v-for="animal in animals" :key="animal.name"
                         :kind="kinds.find(k => k.kind == animal.kind_name)"
-                        :animal="animal" :size="animal.size" :ageTime="ageTime" :sizeDelta="sizeDelta" @age="ageAnimal" />
+                        :animal="animal" :ageTime="ageTime" :sizeDelta="sizeDelta" @age="ageAnimal" />
                 </div>
             </div>
         </div>

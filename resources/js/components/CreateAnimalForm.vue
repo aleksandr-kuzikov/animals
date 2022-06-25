@@ -1,8 +1,11 @@
 <template>
     <form @submit.prevent="submitForm" class="form">
+        <div class="form__loading" v-if="loading">
+            <Loader />
+        </div>
         <div class="form__main">
             <div class="form__icon">
-                <img src="../../assets/images/cat.svg" alt="">
+                <img :src="kind.icon" alt="icon">
             </div>
             <input class="form__input"
                 :placeholder="placeholder"  
@@ -12,33 +15,50 @@
             >
         </div>
         <div class="form__footer">
-            <button>Create</button>
-            <button @click="$emit('close')">Cancel</button>
+            <button class="button">Create</button>
+            <button class="button" @click="$emit('close')">Cancel</button>
         </div>
     </form>
 </template>
 <script>
+import Loader from './Loader.vue'
+
 export default {
+    components: {
+        Loader
+    },
+
     props: {
-        kind: String
+        kind: Object
     },
 
     data: () => ({
-        name: ''
+        name: '',
+        loading: false
     }),
 
     computed: {
         placeholder() {
-            return this.kind + " name"
+            return this.kind.kind + " name"
         }
     },
 
     methods: {
         submitForm() {
-            this.$emit('createanimal', {
-                name: this.name,
-                kind: this.kind
-            })
+            this.loading = true
+            axios
+                .post('/api/animals', {
+                    name: this.name,
+                    kind: this.kind.kind
+                })
+                .then(response => {
+                    this.loading = false
+                    this.$emit('createanimal', response.data)
+                })
+                .catch(error => {
+                    this.loading = false
+                    this.$emit('close')
+                })
         }
     },
 
@@ -59,6 +79,16 @@ export default {
         left: 50%;
 
         transform: translateX(-50%) translateY(-50%);
+    }
+
+    .form__loading {
+        background: #f8f4e5;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
     }
 
     .form__main {
@@ -95,26 +125,5 @@ export default {
 
     .form__footer {
         display: flex;
-    }
-
-    button {
-        display: block;
-        font-family: "Fjalla One";
-        margin: 0 auto;
-        line-height: 32px;
-        padding: 0 20px;
-        background: #ffa580;
-        letter-spacing: 2px;
-        transition: 0.2s all ease-in-out;
-        outline: none;
-        border: 1px solid black;
-        box-shadow: 3px 3px 1px 1px #95a4ff, 3px 3px 1px 2px black;
-        cursor: pointer;
-
-        &:hover {
-            background: black;
-            color: white;
-            border: 1px solid black;
-        }
     }
 </style>

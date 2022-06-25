@@ -11,7 +11,7 @@
                         v-for="kind in kinds"
                         @click="selectKind(kind.kind)" 
                         :key="kind.kind">
-                        <img :src="animals.find(a => a.kind == kind.kind).icon" alt="icon" />
+                        <img :src="kind.icon" alt="icon" />
                     </button>
                 </div>
             </transition>
@@ -20,11 +20,6 @@
 </template>
 
 <script>
-import catSvg from '../../assets/images/cat.svg'
-import dogSvg from '../../assets/images/dog.svg'
-import birdSvg from '../../assets/images/bird.svg'
-import bearSvg from '../../assets/images/bear.svg'
-
 export default {
     props: {
         kinds: Array,
@@ -32,25 +27,7 @@ export default {
     },
 
     data: () => ({
-        show: false,
-        animals: [
-            {
-                kind: 'Cat',
-                icon: catSvg
-            },
-            {
-                kind: 'Dog',
-                icon: dogSvg
-            },
-            {
-                kind: 'Bird',
-                icon: birdSvg
-            },
-            {
-                kind: 'Bear',
-                icon: bearSvg
-            }
-        ]
+        show: false
     }),
 
     methods: {
