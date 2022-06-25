@@ -13,9 +13,6 @@ yarn-error.log
 #build
 /public/hot
 /public/storage
-/public/js
-/public/css
-/public/images
 
 #other
 /storage/*.key
